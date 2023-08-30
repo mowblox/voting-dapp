@@ -4,17 +4,25 @@ import { ethers } from "hardhat";
 describe("Voting", function () {
     async function deployVotingFixture() {
         // Contracts are deployed using the first voter/account by default
-        const [owner, voter1, voter2, candidate1] = await ethers.getSigners();
+        const [owner, voter1, voter2, ec, candidate1] = await ethers.getSigners();
 
         const Voting = await ethers.getContractFactory("Voting");
         const voting = await Voting.deploy();
 
+        //register EC
+        await voting.registerEC
+        (ec.address);
+        
+        // Connect EC to Voting
+        const ecVoting = voting.connect(ec);
+
         // Register voter1 & voter2 as Voters
-        await voting.registerVoter(voter1.address);
-        await voting.registerVoter(voter2.address);
+        await ecVoting.registerVoter(voter1.address);
+        await ecVoting.registerVoter(voter2.address);
 
         // Add Candidate1
-        await voting.addCandidate(candidate1.address, 'Candidate 1');
+        await ecVoting.addCandidate(candidate1.address, 'Candidate 1');
+
 
         return { voting, owner, voter1, voter2, candidate1 };
     }
