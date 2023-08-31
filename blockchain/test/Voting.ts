@@ -1,5 +1,6 @@
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 import { ethers } from "hardhat";
+import { expect } from "chai";
 
 describe("Voting", function () {
     async function deployVotingFixture() {
@@ -11,8 +12,8 @@ describe("Voting", function () {
 
         //register EC
         await voting.registerEC
-        (ec.address);
-        
+            (ec.address);
+
 
 
         // Register voter1 & voter2 as Voters
@@ -29,8 +30,15 @@ describe("Voting", function () {
     it("Should be able to vote", async function () {
         const { voting, owner, voter1, voter2, candidate1 } = await loadFixture(deployVotingFixture);
 
-        console.log(await voting.connect(voter1).vote(candidate1.address));
+        const initialCandidate = await voting.candidates(candidate1.address);
+        const initalTotalVotes = await voting.totalVotes();
 
-        // expect(await lock.unlockTime()).to.equal(unlockTime);
+        await voting.connect(voter1).vote(candidate1.address);
+
+        const finalCandidate = await voting.candidates(candidate1.address);
+        const finalTotalVotes = await voting.totalVotes();
+
+        expect(finalCandidate.voteCount).to.equal(initialCandidate.voteCount + BigInt("1"));
+        expect(finalTotalVotes).to.equal(initalTotalVotes + BigInt("1"));
     });
 });

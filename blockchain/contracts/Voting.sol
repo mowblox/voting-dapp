@@ -7,7 +7,7 @@ contract Voting {
     // Track Voters Voted
     mapping(address => bool) hasVoted;
     // Track Candidates
-    mapping(address => Candidate) candidates;
+    mapping(address => Candidate) public candidates;
 
     struct Candidate {
         address candidateAddress;
@@ -15,7 +15,7 @@ contract Voting {
         uint voteCount;
     }
     // Track Votes Tally
-    uint totalVotes;
+    uint public totalVotes;
     // Contract Owner
     address owner;
     address ec;
