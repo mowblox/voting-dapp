@@ -13,15 +13,14 @@ describe("Voting", function () {
         await voting.registerEC
         (ec.address);
         
-        // Connect EC to Voting
-        const ecVoting = voting.connect(ec);
+
 
         // Register voter1 & voter2 as Voters
-        await ecVoting.registerVoter(voter1.address);
-        await ecVoting.registerVoter(voter2.address);
+        await voting.connect(ec).registerVoter(voter1.address);
+        await voting.connect(ec).registerVoter(voter2.address);
 
         // Add Candidate1
-        await ecVoting.addCandidate(candidate1.address, 'Candidate 1');
+        await voting.connect(ec).addCandidate(candidate1.address, 'Candidate 1');
 
 
         return { voting, owner, voter1, voter2, candidate1 };
